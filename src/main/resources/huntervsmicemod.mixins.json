@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "package": "com.huntervsmicemod.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+    "PlayerDeathMixin",
+    "PlayerEntityMixin",
+    "PlayerTeamVisibilityMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+	}
+}
