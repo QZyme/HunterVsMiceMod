@@ -10,7 +10,7 @@
 	"contact": {
 		"sources": "https://github.com/QZyme/HunterVsMiceMod"
 	},
-	"license": "MIT",
+	"license": "CC0-1.0",
 	"icon": "assets/huntervsmicemod/icon.png",
 	"environment": "*",
 	"entrypoints": {
