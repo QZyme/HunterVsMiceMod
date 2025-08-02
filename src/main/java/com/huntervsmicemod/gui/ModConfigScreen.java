@@ -1,6 +1,5 @@
 package com.huntervsmicemod.gui;
 
-import com.huntervsmicemod.HunterVsMiceMod;
 import com.huntervsmicemod.ModConfig;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.clothconfig2.api.ConfigBuilder;
@@ -8,8 +7,13 @@ import me.shedaniel.clothconfig2.api.ConfigCategory;
 import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.network.PacketByteBuf;
 import net.minecraft.text.Text;
+import net.minecraft.util.Identifier;
 
 @Environment(EnvType.CLIENT)
 public final class ModConfigScreen {
@@ -19,8 +23,33 @@ public final class ModConfigScreen {
                 .setParentScreen(parent)
                 .setTitle(Text.translatable("huntervsmicemod.config.title"))
                 .setSavingRunnable(() -> {
+                    ModConfig newConfig = AutoConfig.getConfigHolder(ModConfig.class).getConfig();
+                    if (MinecraftClient.getInstance().getNetworkHandler()  != null) {
+                        PacketByteBuf buf = PacketByteBufs.create();
+
+                        buf.writeInt(newConfig.swapInterval);
+                        buf.writeInt(newConfig.broadcastInterval);
+                        buf.writeInt(newConfig.respawnRadius);
+                        buf.writeInt(newConfig.prepareTime);
+                        buf.writeInt(newConfig.reallocateDelay);
+                        buf.writeInt(newConfig.dangerDistance);
+                        buf.writeBoolean(newConfig.enableDangerAlerts);
+
+                        buf.writeInt(newConfig.hud.x);
+                        buf.writeInt(newConfig.hud.y);
+                        buf.writeInt(newConfig.hud.width);
+                        buf.writeBoolean(newConfig.hud.showBackground);
+                        buf.writeInt(newConfig.hud.backgroundColor);
+                        buf.writeInt(newConfig.hud.borderColor);
+                        buf.writeInt(newConfig.hud.headerColor);
+                        buf.writeInt(newConfig.hud.textColor);
+                        buf.writeInt(newConfig.hud.highlightColor);
+                        buf.writeBoolean(newConfig.hud.showCountdown);
+                        buf.writeInt(newConfig.hud.countdownXOffset);
+                        buf.writeInt(newConfig.hud.countdownYOffset);
+                        ClientPlayNetworking.send(new Identifier("huntervsmicemod", "sync_config"), buf);
+                    }
                     AutoConfig.getConfigHolder(ModConfig.class).save();
-                    HunterVsMiceMod.reloadConfig();
                 });
 
         ModConfig config = AutoConfig.getConfigHolder(ModConfig.class).getConfig();

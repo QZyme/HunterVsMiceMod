@@ -9,6 +9,7 @@ import com.huntervsmicemod.command.TeamChangeCommand;
 import com.huntervsmicemod.gui.CoordinateHUD;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
+import net.fabricmc.api.EnvType;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
@@ -17,6 +18,7 @@ import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.scoreboard.AbstractTeam;
 import net.minecraft.scoreboard.Scoreboard;
@@ -142,7 +144,7 @@ public class HunterVsMiceMod implements ModInitializer {
                     }));
 
             dispatcher.register(CommandManager.literal("hvmreload")
-                    .requires(source -> source.hasPermissionLevel(4))
+                    .requires(source -> source.hasPermissionLevel(2))
                     .executes(context -> {
                         reloadConfig();
                         context.getSource().sendFeedback(
@@ -163,12 +165,13 @@ public class HunterVsMiceMod implements ModInitializer {
     }
     public static void reloadConfig() {
         try {
-            AutoConfig.getConfigHolder(ModConfig.class).load();
-            config = AutoConfig.getConfigHolder(ModConfig.class).getConfig();
-            LOGGER.info(Text.translatable("huntervsmicemod.message.config_reload_success").getString());
+            if (FabricLoader.getInstance().getEnvironmentType()  == EnvType.SERVER) {
+                AutoConfig.getConfigHolder(ModConfig.class).load();
+                config = AutoConfig.getConfigHolder(ModConfig.class).getConfig();
+                LOGGER.info(Text.translatable("huntervsmicemod.message.config_reload_success").getString());
+            }
         } catch (Exception e) {
-            LOGGER.error(Text.translatable("huntervsmicemod.error.config_reload_failed").getString(),  e);
-            config = new ModConfig();
+            LOGGER.error(Text.translatable("huntervsmicemod.error.config_reload_failed").getString(), e);
         }
     }
     private final Map<UUID, Long> lastAlertTime = new ConcurrentHashMap<>();
@@ -270,6 +273,65 @@ public class HunterVsMiceMod implements ModInitializer {
                     UUID playerId = buf.readUuid();
                     server.execute(()  -> confirmStart(server, playerId));
                 });
+        ServerPlayNetworking.registerGlobalReceiver(
+                new Identifier("huntervsmicemod", "sync_config"),
+                (server, player, handler, buf, responseSender) -> {
+                    if (!player.hasPermissionLevel(2))  {
+                        player.sendMessage(Text.translatable("huntervsmicemod.message.need_op_privileges") .formatted(Formatting.RED), false);
+                        return;
+                    }
+
+                    ModConfig newConfig = new ModConfig();
+
+                    newConfig.swapInterval  = buf.readInt();
+                    newConfig.broadcastInterval  = buf.readInt();
+                    newConfig.respawnRadius  = buf.readInt();
+                    newConfig.prepareTime  = buf.readInt();
+                    newConfig.reallocateDelay  = buf.readInt();
+                    newConfig.dangerDistance  = buf.readInt();
+                    newConfig.enableDangerAlerts  = buf.readBoolean();
+
+                    newConfig.hud  = new ModConfig.HudConfig();
+                    newConfig.hud.x  = buf.readInt();
+                    newConfig.hud.y  = buf.readInt();
+                    newConfig.hud.width  = buf.readInt();
+                    newConfig.hud.showBackground  = buf.readBoolean();
+                    newConfig.hud.backgroundColor  = buf.readInt();
+                    newConfig.hud.borderColor  = buf.readInt();
+                    newConfig.hud.headerColor  = buf.readInt();
+                    newConfig.hud.textColor  = buf.readInt();
+                    newConfig.hud.highlightColor  = buf.readInt();
+                    newConfig.hud.showCountdown  = buf.readBoolean();
+                    newConfig.hud.countdownXOffset  = buf.readInt();
+                    newConfig.hud.countdownYOffset  = buf.readInt();
+
+                    server.execute(()  -> {
+                        try {
+
+                            newConfig.validatePostLoad();
+
+                            AutoConfig.getConfigHolder(ModConfig.class).setConfig(newConfig);
+                            AutoConfig.getConfigHolder(ModConfig.class).save();
+                            config = newConfig;
+
+                            server.getPlayerManager().broadcast(
+                                    Text.translatable("huntervsmicemod.message.config_updated") .formatted(Formatting.GREEN),
+                                    false
+                            );
+
+                            syncTeamDataToAllClients(server);
+
+                        } catch (Exception e) {
+                            LOGGER.error(Text.translatable("huntervsmicemod.error.config_sync_failed").getString(),  e);
+                            player.sendMessage(
+                                    Text.translatable("huntervsmicemod.message.config_sync_error",  e.getMessage())
+                                            .formatted(Formatting.RED),
+                                    false
+                            );
+                        }
+                    });
+                }
+        );
     }
 
     private void handleTeamChangePacket(MinecraftServer server,

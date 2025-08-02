@@ -77,7 +77,10 @@ public class TeamUIScreen extends Screen {
                 Text.translatable("huntervsmicemod.ui.start_game");
 
         ButtonWidget confirmButton = ButtonWidget.builder(
-                        buttonText.formatted(isGamePreparing()  ? Formatting.GREEN : Formatting.DARK_GRAY),
+                        buttonText.formatted(
+                                (isGamePreparing() || (client.player  != null && isOp(client.player)))  ?
+                                        Formatting.GREEN : Formatting.DARK_GRAY
+                        ),
                         button -> {
                             if (client.player  != null) {
                                 if (isGamePreparing()) {
@@ -91,8 +94,7 @@ public class TeamUIScreen extends Screen {
                 .dimensions(width / 2 - 60, panelY + panelHeight - 35, 120, 25)
                 .build();
 
-        confirmButton.active  = isGamePreparing();
-
+        confirmButton.active  = isGamePreparing() || (client.player  != null && isOp(client.player));
         addDrawableChild(confirmButton);
     }
 

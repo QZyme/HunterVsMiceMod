@@ -150,5 +150,9 @@
   "huntervsmicemod.command.stop.not_in_game":  "当前没有游戏正在进行！",
   "huntervsmicemod.command.stop.success":  "已成功停止游戏并返回准备阶段",
   "huntervsmicemod.message.game_stopped_by_admin":  "游戏已被管理员停止。正在返回准备阶段。",
-  "huntervsmicemod.message.returning_to_prepare":  "游戏结束，正在返回准备阶段..."
+  "huntervsmicemod.message.returning_to_prepare":  "游戏结束，正在返回准备阶段...",
+  "huntervsmicemod.message.need_op_privileges":  "需要管理员权限",
+  "huntervsmicemod.message.config_updated":  "服务器配置已更新",
+  "huntervsmicemod.error.config_sync_failed":  "配置同步失败",
+  "huntervsmicemod.message.config_sync_error":  "配置同步失败: %s"
 }

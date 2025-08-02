@@ -150,5 +150,9 @@
   "huntervsmicemod.command.stop.not_in_game":  "Game is not currently running!",
   "huntervsmicemod.command.stop.success":  "Successfully stopped the game and returned to preparation phase",
   "huntervsmicemod.message.game_stopped_by_admin":  "The game has been stopped by an admin. Returning to preparation phase.",
-  "huntervsmicemod.message.returning_to_prepare":  "Game ended, returning to preparation phase..."
+  "huntervsmicemod.message.returning_to_prepare":  "Game ended, returning to preparation phase...",
+  "huntervsmicemod.message.need_op_privileges":  "Administrator privileges are required",
+  "huntervsmicemod.message.config_updated":  "Server configuration has been updated",
+  "huntervsmicemod.error.config_sync_failed":  "Configuration sync failed",
+  "huntervsmicemod.message.config_sync_error":  "Configuration sync failed: %s"
 }
