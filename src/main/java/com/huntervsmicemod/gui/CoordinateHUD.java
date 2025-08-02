@@ -19,23 +19,23 @@ import static com.mojang.text2speech.Narrator.LOGGER;
 
 public class CoordinateHUD {
     private static int getBackgroundColor() {
-        return HunterVsMiceMod.getConfig().hud.backgroundColor;
+        return 0xCC000000 | (HunterVsMiceMod.getConfig().hud.backgroundColor  & 0xFFFFFF);
     }
 
     private static int getBorderColor() {
-        return HunterVsMiceMod.getConfig().hud.borderColor;
+        return 0xFF000000 | (HunterVsMiceMod.getConfig().hud.borderColor  & 0xFFFFFF);
     }
 
     private static int getHeaderColor() {
-        return HunterVsMiceMod.getConfig().hud.headerColor;
+        return 0xFF000000 | (HunterVsMiceMod.getConfig().hud.headerColor  & 0xFFFFFF);
     }
 
     private static int getTextColor() {
-        return HunterVsMiceMod.getConfig().hud.textColor;
+        return 0xFF000000 | (HunterVsMiceMod.getConfig().hud.textColor  & 0xFFFFFF);
     }
 
     private static int getHighlightColor() {
-        return HunterVsMiceMod.getConfig().hud.highlightColor;
+        return 0xFF000000 | (HunterVsMiceMod.getConfig().hud.highlightColor  & 0xFFFFFF);
     }
 
     private static int currentCountdown = -1;

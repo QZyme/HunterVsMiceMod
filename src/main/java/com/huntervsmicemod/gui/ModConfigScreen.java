@@ -112,7 +112,7 @@ public final class ModConfigScreen {
 
         hudCategory.addEntry(entryBuilder.startIntField(Text.translatable("huntervsmicemod.config.countdown_x_offset"),  config.hud.countdownXOffset)
                 .setMin(-50).setMax(50)
-                .setDefaultValue(0)
+                .setDefaultValue(-10)
                 .setSaveConsumer(val -> config.hud.countdownXOffset  = val)
                 .setTooltip(Text.translatable("huntervsmicemod.config.countdown_x_offset.tooltip"))
                 .build());
@@ -127,32 +127,32 @@ public final class ModConfigScreen {
         ConfigCategory colorsCategory = builder.getOrCreateCategory(Text.translatable("huntervsmicemod.config.category.colors"));
 
         colorsCategory.addEntry(entryBuilder.startColorField(Text.translatable("huntervsmicemod.config.background_color"),  config.hud.backgroundColor)
-                .setDefaultValue(0xCC222222)
-                .setSaveConsumer(val -> config.hud.backgroundColor  = val)
+                .setDefaultValue(0x222222)
+                .setSaveConsumer(val -> config.hud.backgroundColor  = val & 0xFFFFFF)
                 .setTooltip(Text.translatable("huntervsmicemod.config.background_color.tooltip"))
                 .build());
 
         colorsCategory.addEntry(entryBuilder.startColorField(Text.translatable("huntervsmicemod.config.border_color"),  config.hud.borderColor)
-                .setDefaultValue(0xFF444444)
-                .setSaveConsumer(val -> config.hud.borderColor  = val)
+                .setDefaultValue(0x444444)
+                .setSaveConsumer(val -> config.hud.borderColor  = val & 0xFFFFFF)
                 .setTooltip(Text.translatable("huntervsmicemod.config.border_color.tooltip"))
                 .build());
 
         colorsCategory.addEntry(entryBuilder.startColorField(Text.translatable("huntervsmicemod.config.header_color"),  config.hud.headerColor)
-                .setDefaultValue(0xFFF5A623)
-                .setSaveConsumer(val -> config.hud.headerColor  = val)
+                .setDefaultValue(0xF5A623)
+                .setSaveConsumer(val -> config.hud.headerColor  = val & 0xFFFFFF)
                 .setTooltip(Text.translatable("huntervsmicemod.config.header_color.tooltip"))
                 .build());
 
         colorsCategory.addEntry(entryBuilder.startColorField(Text.translatable("huntervsmicemod.config.text_color"),  config.hud.textColor)
-                .setDefaultValue(0xFFDDDDDD)
-                .setSaveConsumer(val -> config.hud.textColor  = val)
+                .setDefaultValue(0xDDDDDD)
+                .setSaveConsumer(val -> config.hud.textColor  = val & 0xFFFFFF)
                 .setTooltip(Text.translatable("huntervsmicemod.config.text_color.tooltip"))
                 .build());
 
         colorsCategory.addEntry(entryBuilder.startColorField(Text.translatable("huntervsmicemod.config.highlight_color"),  config.hud.highlightColor)
-                .setDefaultValue(0xFF00FF00)
-                .setSaveConsumer(val -> config.hud.highlightColor  = val)
+                .setDefaultValue(0x00FF00)
+                .setSaveConsumer(val -> config.hud.highlightColor  = val & 0xFFFFFF)
                 .setTooltip(Text.translatable("huntervsmicemod.config.highlight_color.tooltip"))
                 .build());
 

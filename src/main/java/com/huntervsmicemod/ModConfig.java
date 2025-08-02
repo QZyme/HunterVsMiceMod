@@ -55,23 +55,23 @@ public class ModConfig implements ConfigData {
 
         @ConfigEntry.Gui.Tooltip
         @ConfigEntry.ColorPicker
-        public int backgroundColor = 0xCC222222;
+        public int backgroundColor = 0x222222;
 
         @ConfigEntry.Gui.Tooltip
         @ConfigEntry.ColorPicker
-        public int borderColor = 0xFF444444;
+        public int borderColor = 0x444444;
 
         @ConfigEntry.Gui.Tooltip
         @ConfigEntry.ColorPicker
-        public int headerColor = 0xFFF5A623;
+        public int headerColor = 0xF5A623;
 
         @ConfigEntry.Gui.Tooltip
         @ConfigEntry.ColorPicker
-        public int textColor = 0xFFDDDDDD;
+        public int textColor = 0xDDDDDD;
 
         @ConfigEntry.Gui.Tooltip
         @ConfigEntry.ColorPicker
-        public int highlightColor = 0xFF00FF00;
+        public int highlightColor = 0x00FF00;
 
         @ConfigEntry.Gui.Tooltip
         public boolean showCountdown = true;
