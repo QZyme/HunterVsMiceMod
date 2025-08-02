@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"id": "huntervsmicemod",
-	"version": "1.0.0-beta",
+	"version": "1.0.1-beta",
 	"name": "HunterVsMiceMod",
 	"description": "两队对抗游戏模组，猎人与鼠鼠的身份会不定期互换",
 	"authors": [
